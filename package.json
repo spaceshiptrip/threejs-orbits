@@ -4,5 +4,8 @@
   "main": "app.js",
   "repository": "git@github.com:spaceshiptrip/threejs-orbits.git",
   "author": "spaceshiptrip <4379326+spaceshiptrip@users.noreply.github.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
