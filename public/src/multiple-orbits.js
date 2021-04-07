@@ -43,7 +43,7 @@ function init() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
     // axes
-    scene.add(new THREE.AxisHelper(20));
+    scene.add(new THREE.AxesHelper(20));
 
     // geometry
     var geometry = new THREE.SphereGeometry(2, 16, 8);
@@ -136,9 +136,29 @@ function init() {
     scene.add(sun);
 
     // axes
-    planet.add(new THREE.AxisHelper(2.5));
-    moon.add(new THREE.AxisHelper(2.5));
+    planet.add(new THREE.AxesHelper(2.5));
+    moon.add(new THREE.AxesHelper(2.5));
 
+}
+
+/**
+ * generates a mesh with the texture.  the `otherImage` is a normal map
+ * 
+ * @param {*} geometry 
+ * @param {*} image 
+ * @param {*} otherImage 
+ * @returns 
+ */
+function createTextureMesh(geometry, image, otherImage) {
+    let map = new THREE.TextureLoader().load(image);
+    let normalMap = new THREE.TextureLoader().load(otherImage);
+
+    let material = new THREE.MeshPhongMaterial();
+        material.map = map;//Bottom mapping
+        material.normalMap = normalMap;//normal map
+        material.normalScale = new THREE.Vector2(0.3, 0.3);//Concavo convex degree
+
+    return new THREE.Mesh(geometry, material);
 }
 
 function animate() {
