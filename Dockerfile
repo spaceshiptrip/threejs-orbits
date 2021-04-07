@@ -17,4 +17,4 @@ COPY . /app
 EXPOSE 3000
 
 # run the server application
-CMD [ "node", "multiple-orbits.js" ]
+CMD [ "node", "app.js" ]
