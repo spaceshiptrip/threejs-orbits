@@ -118,11 +118,21 @@ function init() {
     };
 
     // mesh
-    sun = new Planet(geometry, material1);
-    planet = new Planet(geometry, material2);
+    sunTexture = new THREE.TextureLoader().load('src/assets/sunmap.jpg');
+    // sunMaterial = new THREE.MeshPhongMaterial();
+    // sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xac3d25});
+    sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xffffff});
+    // sunMaterial.map = sunTexture;
+    sun = new Planet(geometry, sunMaterial);
+
+
+    planetMaterial = createMaterialWithBump('src/assets/earthmap1k.jpg', 'src/assets/earthbump1k.jpg');
+    planet = new Planet(geometry, planetMaterial);
     planet.position.set(8, 0, 0);
     planet.scale.multiplyScalar(0.5);
-    moon = new Planet(geometry, material3);
+
+    moonMaterial = createMaterialWithBump('src/assets/moonmap2k.jpg', 'src/assets/moonbump2k.jpg');
+    moon = new Planet(geometry, moonMaterial);
     moon.position.set(2, 0, 0);
     moon.orbitSpeed = Math.PI;
     moon.scale.multiplyScalar(0.2);
@@ -139,6 +149,17 @@ function init() {
     planet.add(new THREE.AxesHelper(2.5));
     moon.add(new THREE.AxesHelper(2.5));
 
+
+    // pointLight = new THREE.PointLight(0xffffff, 0.1)
+    // pointLight.position.x = 0
+    // pointLight.position.y = 0
+    // pointLight.position.z = 0
+    pointLight = new THREE.PointLight(0xffffff);
+    scene.add(pointLight)
+
+    // const light = new THREE.AmbientLight(0x404040); // soft white light
+    // scene.add(light);
+
 }
 
 /**
@@ -149,23 +170,53 @@ function init() {
  * @param {*} otherImage 
  * @returns 
  */
-function createTextureMesh(geometry, image, otherImage) {
+function createTextureMeshWithNormal(geometry, image, otherImage) {
     let map = new THREE.TextureLoader().load(image);
     let normalMap = new THREE.TextureLoader().load(otherImage);
 
     let material = new THREE.MeshPhongMaterial();
-        material.map = map;//Bottom mapping
-        material.normalMap = normalMap;//normal map
-        material.normalScale = new THREE.Vector2(0.3, 0.3);//Concavo convex degree
+    material.map = map;//Bottom mapping
+    material.normalMap = normalMap;//normal map
+    // scale determines how much the normal will affect the image default is 1
+    // material.normalScale = new THREE.Vector2(0.3, 0.3);//Concavo convex degree
 
     return new THREE.Mesh(geometry, material);
 }
+
+function createTextureMeshWithBump(geometry, image, otherImage) {
+    let map = new THREE.TextureLoader().load(image);
+    let bumpMap = new THREE.TextureLoader().load(otherImage);
+
+    let material = new THREE.MeshPhongMaterial();
+    material.map = map;//Bottom mapping
+    material.bumpMap = bumpMap;//normal map
+    // scale determines how much the normal will affect the image default is 1
+    material.bumpScale = new THREE.Vector2(0.3, 0.3);//Concavo convex degree
+
+    return new THREE.Mesh(geometry, material);
+}
+
+function createMaterialWithBump(image, bumpImage) {
+    let map = new THREE.TextureLoader().load(image);
+    let bumpMap = new THREE.TextureLoader().load(bumpImage);
+    let material = new THREE.MeshPhongMaterial();
+    material.map = map;
+    material.bumpMap = bumpMap;
+    // material.bumpScale = new THREE.Vector2(0.3, 0.3);//Concavo convex degree
+    // material.bumpScale = new THREE.Vector2(0.1, 0.1);
+
+
+    return material;
+}
+
+
 
 function animate() {
 
     requestAnimationFrame(animate);
     delta = clock.getDelta();
-    //sun.position.y = Math.sin(t++/100);
+    // sun.position.y = Math.sin(t++/100);
+    // pointLight.position.y = sun.position.y;
 
     renderer.render(scene, camera);
 
