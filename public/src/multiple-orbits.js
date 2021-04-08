@@ -13,9 +13,11 @@ const gltbModel = 'src/assets/Phobos_1_1000.glb';
 let yRotation =  0; 
 let xPosition = -3.2;	 
 let zPosition =  3.5;
+
+let theta = -10;
 // -----         -----
 
-let model = new THREE.Object3D( );
+let model = new THREE.Object3D();
 let c, size; // model center and size
  
 let x0 = xPosition;
@@ -150,12 +152,14 @@ function init() {
     planetMaterial = createMaterialWithBump('src/assets/earthmap1k.jpg', 'src/assets/earthbump1k.jpg');
     planet = new Planet(geometry, planetMaterial);
     planet.receiveShadow = true;
+    planet.castShadow = true;
     planet.position.set(8, 0, 0);
     planet.scale.multiplyScalar(0.5);
 
     moonMaterial = createMaterialWithBump('src/assets/moonmap2k.jpg', 'src/assets/moonbump2k.jpg');
     moon = new Planet(geometry, moonMaterial);
     moon.castShadow = true;
+    moon.receiveShadow = true;
     moon.position.set(4, 0, 0);
     moon.orbitSpeed = Math.PI / 2;
     moon.scale.multiplyScalar(0.1);
@@ -261,6 +265,8 @@ function init() {
 
 
         // model.add(root);
+        model.castShadow = true;
+        model.receiveShadow = true;
 
         scene.add(model);
 
@@ -327,17 +333,28 @@ function animate() {
     // sun.position.y = Math.sin(t++/100);
     // pointLight.position.y = sun.position.y;
 
+    // circle
+    // xPosition = Math.sqrt(Math.sqr(modelRadius) - Math.sqr(yPosition - yOrigin)) - xOrigin;
+    // x = radius *  cos(angle)
+    // y = radius *  sin(angle)
+
+    let modelRadius = 15;
+
 	yRotation += 0.005;	
-	t += 0.001;
+	t += 0.1;
 	dx = Math.sin( t )	
 	xPosition = x0 + dx;	
  	
 	model.rotation.y = yRotation;
 	
-	model.position.x = xPosition;
-	model.position.z = zPosition;
+	// model.position.x = xPosition
+	// model.position.z = zPosition
 
+    theta += 0.005;
+    model.position.x = modelRadius * Math.cos(theta);
+    model.position.y = modelRadius * Math.sin(theta);
 
+console.log('x:' + xPosition + '  z:' + zPosition);
 
     renderer.render(scene, camera);
 
