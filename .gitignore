@@ -1,6 +1,9 @@
 *.apk
 *.tgz
 node_modules
+
+
+
 # Logs
 logs
 *.log
@@ -105,3 +108,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# User specific files
+Ingenuity_v3.glb
