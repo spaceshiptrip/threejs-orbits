@@ -10,16 +10,16 @@ const gltbModel = 'src/assets/Phobos_1_1000.glb';
 // const gltbModel = 'src/assets/Ingenuity_v3.glb';
 
 // --- data input ---
-let yRotation =  0; 
-let xPosition = -3.2;	 
-let zPosition =  3.5;
+let yRotation = 0;
+let xPosition = -3.2;
+let zPosition = 3.5;
 
 let theta = -10;
 // -----         -----
 
 let model = new THREE.Object3D();
 let c, size; // model center and size
- 
+
 let x0 = xPosition;
 let dx;
 
@@ -185,7 +185,7 @@ function init() {
     pointLight.castShadow = true;
     // pointLight.shadowDarkness = 0.5;
     // pointLight.shadowCameraVisible = true;
-    var shadowHelper = new THREE.CameraHelper( pointLight.shadow.camera);
+    var shadowHelper = new THREE.CameraHelper(pointLight.shadow.camera);
     scene.add(shadowHelper);
 
 
@@ -220,11 +220,11 @@ function init() {
         // root.position.x = 5;
         // root.position.y = 2;
 
-        gltf.scene.traverse( child => {
+        gltf.scene.traverse(child => {
 
-            if ( child.material ) child.material.metalness = 0;
+            if (child.material) child.material.metalness = 0;
 
-        } );
+        });
         // const light = new THREE.AmbientLight(0x404040); // soft white light
         // root.add(light);
         // root.rotation.z = Math.PI;
@@ -252,16 +252,16 @@ function init() {
         gltf.scene.scale.multiplyScalar(0.1);
 
 
-        const box = new THREE.Box3( ).setFromObject( gltf.scene );		 
-        const boxHelper = new THREE.Box3Helper( box, 0xffff00 );
+        const box = new THREE.Box3().setFromObject(gltf.scene);
+        const boxHelper = new THREE.Box3Helper(box, 0xffff00);
         // scene.add( boxHelper );
-        
-        c = box.getCenter( new THREE.Vector3( ) );
-        size = box.getSize( new THREE.Vector3( ) );
-        
-        gltf.scene.position.set( -c.x, size.y / 2 - c.y, -c.z );
-    
-        model.add( gltf.scene );
+
+        c = box.getCenter(new THREE.Vector3());
+        size = box.getSize(new THREE.Vector3());
+
+        gltf.scene.position.set(-c.x, size.y / 2 - c.y, -c.z);
+
+        model.add(gltf.scene);
 
 
         // model.add(root);
@@ -340,21 +340,21 @@ function animate() {
 
     let modelRadius = 15;
 
-	yRotation += 0.005;	
-	t += 0.1;
-	dx = Math.sin( t )	
-	xPosition = x0 + dx;	
- 	
-	model.rotation.y = yRotation;
-	
-	// model.position.x = xPosition
-	// model.position.z = zPosition
+    yRotation += 0.01;
+    // t += 0.1;
+    // dx = Math.sin( t )	
+    // xPosition = x0 + dx;	
+
+    model.rotation.y = yRotation;
+
+    // model.position.x = xPosition
+    // model.position.z = zPosition
 
     theta += 0.005;
     model.position.x = modelRadius * Math.cos(theta);
     model.position.y = modelRadius * Math.sin(theta);
 
-console.log('x:' + xPosition + '  z:' + zPosition);
+    console.log('x:' + xPosition + '  z:' + zPosition);
 
     renderer.render(scene, camera);
 
