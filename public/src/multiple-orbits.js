@@ -9,6 +9,8 @@ var t = 0;
 init();
 animate();
 
+// const OBJLoader =require('https://threejsfundamentals.org/threejs/resources/threejs/r125/examples/jsm/loaders/OBJLoader.js');
+
 
 
 function init() {
@@ -123,7 +125,7 @@ function init() {
     // sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xac3d25});
     sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xffffff});
     // sunMaterial.map = sunTexture;
-    sun = new Planet(geometry, sunMaterial);
+    sun = new Planet(geometry, material1);
 
 
     planetMaterial = createMaterialWithBump('src/assets/earthmap1k.jpg', 'src/assets/earthbump1k.jpg');
@@ -159,6 +161,22 @@ function init() {
 
     // const light = new THREE.AmbientLight(0x404040); // soft white light
     // scene.add(light);
+
+
+    // load obj files
+    // phobosShape = new OBJLoader().load('src/assets/deimos.obj.bin');
+    phobosShape = new THREE.OBJLoader();
+   
+    // var phobosRoot;
+    phobosShape.load('src/assets/StarWarsCorvette.obj', function (object) {
+        object.position.set(0, 0, 0);
+        object.rotation.z = Math.PI;
+        // scene.add(root);
+        scene.add(object);
+      });
+
+    // phobosRoot.position.set(1, 1, 1);
+    // scene.add(phobosRoot);
 
 }
 
