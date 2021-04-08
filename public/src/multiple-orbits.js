@@ -6,6 +6,9 @@ var delta = 0;
 
 var t = 0;
 
+const gltbModel = 'src/assets/Phobos_1_1000.glb';
+// const gltbModel = 'src/assets/Ingenuity_v3.glb';
+
 // --- data input ---
 let yRotation =  0; 
 let xPosition = -3.2;	 
@@ -153,13 +156,13 @@ function init() {
     moonMaterial = createMaterialWithBump('src/assets/moonmap2k.jpg', 'src/assets/moonbump2k.jpg');
     moon = new Planet(geometry, moonMaterial);
     moon.castShadow = true;
-    moon.position.set(2, 0, 0);
-    moon.orbitSpeed = Math.PI;
-    moon.scale.multiplyScalar(0.2);
+    moon.position.set(4, 0, 0);
+    moon.orbitSpeed = Math.PI / 2;
+    moon.scale.multiplyScalar(0.1);
 
     sun.rotation.z += 1;
     planet.rotation.z += 0.5;
-    moon.rotation.z -= 1;
+    moon.rotation.z -= 0.5;
 
     planet.add(moon);
     sun.add(planet);
@@ -205,7 +208,7 @@ function init() {
 
 
     const phobosShape = new THREE.GLTFLoader();
-    phobosShape.load('src/assets/Phobos_1_1000.glb', (gltf) => {
+    phobosShape.load(gltbModel, (gltf) => {
 
         // const root = gltf.scene;
         // root.scale.multiplyScalar(0.05);
