@@ -6,6 +6,15 @@ var delta = 0;
 
 var t = 0;
 
+var yRotation =  0; 
+var xPosition = -1.2;	 
+var zPosition =  3.5;
+
+let x0 = xPosition;
+let dx;
+
+var model;
+
 init();
 animate();
 
@@ -123,7 +132,7 @@ function init() {
     sunTexture = new THREE.TextureLoader().load('src/assets/sunmap.jpg');
     // sunMaterial = new THREE.MeshPhongMaterial();
     // sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xac3d25});
-    sunMaterial = new THREE.MeshLambertMaterial({map: sunTexture, emissive: 0xffffff});
+    sunMaterial = new THREE.MeshLambertMaterial({ map: sunTexture, emissive: 0xffffff });
     // sunMaterial.map = sunTexture;
     sun = new Planet(geometry, material1);
 
@@ -165,18 +174,73 @@ function init() {
 
     // load obj files
     // phobosShape = new OBJLoader().load('src/assets/deimos.obj.bin');
-    phobosShape = new THREE.OBJLoader();
-   
+    //phobosShape = new THREE.OBJLoader();
+
     // var phobosRoot;
-    phobosShape.load('src/assets/StarWarsCorvette.obj', function (object) {
-        object.position.set(0, 0, 0);
-        object.rotation.z = Math.PI;
-        // scene.add(root);
-        scene.add(object);
-      });
+    // phobosShape.load('src/assets/StarWarsCorvette.obj', function (object) {
+    //     object.position.set(0, 0, 0);
+    //     object.rotation.z = Math.PI;
+    //     // scene.add(root);
+    //     scene.add(object);
+    //   });
 
     // phobosRoot.position.set(1, 1, 1);
     // scene.add(phobosRoot);
+
+
+    const phobosShape = new THREE.GLTFLoader();
+    phobosShape.load('src/assets/Phobos_1_1000.glb', (gltf) => {
+
+        const root = gltf.scene;
+        root.scale.multiplyScalar(0.05);
+        root.rotation.z += 1;
+        root.position.x = 5;
+        root.position.y = 2;
+
+        // gltf.scene.traverse( child => {
+
+        //     if ( child.material ) child.material.metalness = 0;
+
+        // } );
+        // const light = new THREE.AmbientLight(0x404040); // soft white light
+        // root.add(light);
+        // root.rotation.z = Math.PI;
+
+        // root.rotationAxis = new THREE.Vector3(0, 1, 0).normalize(); // always orbit on Y
+        // root.rotationSpeed = Math.PI / 2; // length of planet day
+
+        // root.orbitAxis = new THREE.Vector3(0, 0.1, 1).normalize(); // y,z for orbit AXIS
+        // root.orbitSpeed = Math.PI / 8; // length of planet year
+
+        // gltf.updateMatrix = function () {
+
+        //     var dta = delta || 0;
+
+
+        //     root.position.applyAxisAngle(root.orbitAxis, root.orbitSpeed * dta);
+
+
+        //     root.rotateOnAxis(root.rotationAxis, root.rotationSpeed * dta);
+
+        //     root._matrixUpdate();
+        // };
+
+
+
+        model.add(root);
+
+        scene.add(model);
+
+
+    });
+
+
+    // get access to the model so you can do stuff
+    model = new THREE.Object3D();
+
+
+
+
 
 }
 
@@ -235,6 +299,18 @@ function animate() {
     delta = clock.getDelta();
     // sun.position.y = Math.sin(t++/100);
     // pointLight.position.y = sun.position.y;
+
+	yRotation += 0.005;	
+	t += 0.001;
+	dx = Math.sin( t )	
+	xPosition = x0 + dx;	
+ 	
+	model.rotation.y = yRotation;
+	
+	model.position.x = xPosition;
+	model.position.z = zPosition;
+
+
 
     renderer.render(scene, camera);
 
