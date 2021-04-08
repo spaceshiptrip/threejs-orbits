@@ -6,14 +6,18 @@ var delta = 0;
 
 var t = 0;
 
-var yRotation =  0; 
-var xPosition = -1.2;	 
-var zPosition =  3.5;
+// --- data input ---
+let yRotation =  0; 
+let xPosition = -3.2;	 
+let zPosition =  3.5;
+// -----         -----
 
+let model = new THREE.Object3D( );
+let c, size; // model center and size
+ 
 let x0 = xPosition;
 let dx;
 
-var model;
 
 init();
 animate();
@@ -40,6 +44,9 @@ function init() {
 
     // renderer
     renderer = new THREE.WebGLRenderer();
+    renderer.shadowMapEnabled = true;
+    renderer.shadowMapType = THREE.PCFSoftShadowMap;
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
@@ -139,11 +146,13 @@ function init() {
 
     planetMaterial = createMaterialWithBump('src/assets/earthmap1k.jpg', 'src/assets/earthbump1k.jpg');
     planet = new Planet(geometry, planetMaterial);
+    planet.receiveShadow = true;
     planet.position.set(8, 0, 0);
     planet.scale.multiplyScalar(0.5);
 
     moonMaterial = createMaterialWithBump('src/assets/moonmap2k.jpg', 'src/assets/moonbump2k.jpg');
     moon = new Planet(geometry, moonMaterial);
+    moon.castShadow = true;
     moon.position.set(2, 0, 0);
     moon.orbitSpeed = Math.PI;
     moon.scale.multiplyScalar(0.2);
@@ -166,6 +175,11 @@ function init() {
     // pointLight.position.y = 0
     // pointLight.position.z = 0
     pointLight = new THREE.PointLight(0xffffff);
+    pointLight.castShadow = true;
+    pointLight.shadowDarkness = 0.5;
+    pointLight.shadowCameraVisible = true;
+
+
     scene.add(pointLight)
 
     // const light = new THREE.AmbientLight(0x404040); // soft white light
@@ -191,17 +205,17 @@ function init() {
     const phobosShape = new THREE.GLTFLoader();
     phobosShape.load('src/assets/Phobos_1_1000.glb', (gltf) => {
 
-        const root = gltf.scene;
-        root.scale.multiplyScalar(0.05);
-        root.rotation.z += 1;
-        root.position.x = 5;
-        root.position.y = 2;
+        // const root = gltf.scene;
+        // root.scale.multiplyScalar(0.05);
+        // root.rotation.z += 1;
+        // root.position.x = 5;
+        // root.position.y = 2;
 
-        // gltf.scene.traverse( child => {
+        gltf.scene.traverse( child => {
 
-        //     if ( child.material ) child.material.metalness = 0;
+            if ( child.material ) child.material.metalness = 0;
 
-        // } );
+        } );
         // const light = new THREE.AmbientLight(0x404040); // soft white light
         // root.add(light);
         // root.rotation.z = Math.PI;
@@ -226,19 +240,27 @@ function init() {
         // };
 
 
+        gltf.scene.scale.multiplyScalar(0.1);
 
-        model.add(root);
+
+        const box = new THREE.Box3( ).setFromObject( gltf.scene );		 
+        const boxHelper = new THREE.Box3Helper( box, 0xffff00 );
+        // scene.add( boxHelper );
+        
+        c = box.getCenter( new THREE.Vector3( ) );
+        size = box.getSize( new THREE.Vector3( ) );
+        
+        gltf.scene.position.set( -c.x, size.y / 2 - c.y, -c.z );
+    
+        model.add( gltf.scene );
+
+
+        // model.add(root);
 
         scene.add(model);
 
 
     });
-
-
-    // get access to the model so you can do stuff
-    model = new THREE.Object3D();
-
-
 
 
 
