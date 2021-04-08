@@ -176,14 +176,16 @@ function init() {
     // pointLight.position.z = 0
     pointLight = new THREE.PointLight(0xffffff);
     pointLight.castShadow = true;
-    pointLight.shadowDarkness = 0.5;
-    pointLight.shadowCameraVisible = true;
+    // pointLight.shadowDarkness = 0.5;
+    // pointLight.shadowCameraVisible = true;
+    var shadowHelper = new THREE.CameraHelper( pointLight.shadow.camera);
+    scene.add(shadowHelper);
 
 
     scene.add(pointLight)
 
-    // const light = new THREE.AmbientLight(0x404040); // soft white light
-    // scene.add(light);
+    const light = new THREE.AmbientLight(0x404040, 1); // soft white light
+    scene.add(light);
 
 
     // load obj files
