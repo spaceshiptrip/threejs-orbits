@@ -351,8 +351,8 @@ function animate() {
     // model.position.z = zPosition
 
     theta += 0.005;
-    model.position.x = modelRadius * Math.cos(theta);
-    model.position.y = modelRadius * Math.sin(theta);
+    model.position.x = modelRadius * -Math.cos(theta);
+    model.position.y = modelRadius * -Math.sin(theta);
 
     console.log('x:' + xPosition + '  z:' + zPosition);
 
