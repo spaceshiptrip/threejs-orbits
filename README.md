@@ -31,3 +31,8 @@ moonMesh.rotation.y = Date.now() * -0.001;
 moonMesh.position.x = Math.sin( Date.now() * 0.001 ) * 219.15 + Math.cos( Date.now() * -0.007 ) * -10;
 moonMesh.position.z = Math.cos( Date.now() * 0.001 ) * 219.15 + Math.sin( Date.now() * -0.007 ) * -10;
 ```
+
+
+---
+## Further Reading
+https://stackoverflow.com/questions/29744233/animating-planet-orbiting-its-parent-idependent-on-parents-rotation-state
